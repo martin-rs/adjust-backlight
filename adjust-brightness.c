@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
 		else if (new > max) new = max;
 		fprintf(fp, "%d\n", new);
 		fclose(fp);
+		fp = NULL;
 	} else return EXIT_FAILURE;
 
 	return EXIT_SUCCESS;
@@ -46,6 +47,8 @@ void status_check(void) {
 	int c = 0;
 	while ((c = fgetc(fp)) != EOF) printf("%c", c);
 
+	fclose(fp);
+	fp = NULL;
 	exit(EXIT_SUCCESS);
 }
 
@@ -58,9 +61,13 @@ int get_max(void) {
 
 	int max = 0;
 	char* string_max = (char *)malloc(sizeof(char) * 6);
+	
 	fgets(string_max, 6, fp);
 	max = atoi(string_max);
+
 	free(string_max);
+	fclose(fp);
+	fp = NULL;
 
 	return max;
 }
