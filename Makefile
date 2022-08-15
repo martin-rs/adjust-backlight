@@ -1,5 +1,12 @@
+CC=cc
+CFLAGS=-Wall -std=c17
+
+SRC=adjust-brightness.c
+
+BIN_PATH=${SCRIPTDIR}/system/br
+
 all:
-	cc -Wall -std=c17 adjust-brightness.c -o ${SCRIPTDIR}/system/br
+	$(CC) $(CFLAGS) $(SRC) -o $(BIN_PATH)
 
 clean:
-	rm -rf ${SCRIPTDIR}/system/br
+	rm -f $(BIN_PATH)
