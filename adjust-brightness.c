@@ -2,12 +2,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
-#define BUFSIZE 6
+#define BUFSIZE 8
 #define BRIGHTNESS_PATH "/sys/class/backlight/intel_backlight/brightness"
 #define MAX_BRIGHTNESS_PATH "/sys/class/backlight/intel_backlight/max_brightness"
 
 void status_check(void);
-int get_max(void);
+unsigned long get_max(void);
 
 int main(int argc, char **argv) {
 	if (argc > 2) {
@@ -18,18 +18,21 @@ int main(int argc, char **argv) {
 
 	FILE *fp = 0;
 	char string_current_brightness[BUFSIZE];
-	int new = 0, current_brightness = 0, increment = 0, min = 10, max = get_max();
+	unsigned long new = 0, current_brightness = 0, increment = 0, min = 10, max = get_max();
 
 	if ((increment = atoi(argv[1])) == 0) return EXIT_FAILURE;
 
-	if ((fp = fopen(BRIGHTNESS_PATH, "r+")) && fgets(
-				string_current_brightness, BUFSIZE, fp)) {
+	if ((fp = fopen(BRIGHTNESS_PATH, "r+")) && 
+	     fgets(string_current_brightness, BUFSIZE, fp)) {
 		current_brightness = atoi(string_current_brightness);
 		rewind(fp);
-		new = current_brightness + increment;
+		if (argv[1][0] == '+' || argv[1][0] == '-')
+			new = current_brightness + increment;
+		else 
+			new = increment;
 		if (new < min) new = min;
 		else if (new > max) new = max;
-		fprintf(fp, "%d\n", new);
+		fprintf(fp, "%ld\n", new);
 		fclose(fp);
 		fp = NULL;
 	} else return EXIT_FAILURE;
@@ -52,17 +55,17 @@ void status_check(void) {
 	exit(EXIT_SUCCESS);
 }
 
-int get_max(void) {
+unsigned long get_max(void) {
 	FILE *fp = fopen(MAX_BRIGHTNESS_PATH, "r");
 	if (fp == NULL) {
 		fprintf(stderr, "Error opening file (max_brightness).\n");
 		exit(EXIT_FAILURE);
 	}
 
-	int max = 0;
-	char* string_max = (char *)malloc(sizeof(char) * 6);
+	unsigned long max = 0;
+	char* string_max = (char *)malloc(sizeof(char) * 8);
 	
-	fgets(string_max, 6, fp);
+	fgets(string_max, 8, fp);
 	max = atoi(string_max);
 
 	free(string_max);

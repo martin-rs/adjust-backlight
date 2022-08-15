@@ -21,5 +21,6 @@ br +1000
 br -1000
 ```
 
-- To increment the value you can use the + symbol or no symbol.
+- To set a specific value use no symbol.
+- To increment the value you can use the + symbol.
 - To decrement the value you can use the - symbol.
