@@ -63,12 +63,17 @@ unsigned long get_max(void) {
 	}
 
 	unsigned long max = 0;
-	char* string_max = (char *)malloc(sizeof(char) * 8);
+	char *string_max = (char *)malloc(sizeof(char) * 8);
+	if (string_max == NULL) {
+		fprintf(stderr, "Error allocating memory.\n");
+		exit(EXIT_FAILURE);
+	}
 	
 	fgets(string_max, 8, fp);
 	max = atoi(string_max);
 
 	free(string_max);
+	string_max = NULL:
 	fclose(fp);
 	fp = NULL;
 
