@@ -1,9 +1,9 @@
 CC=cc
 CFLAGS=-Wall -std=c17
 
-SRC=adjust-brightness.c
+SRC=bl.c
 
-BIN_PATH=${SCRIPTDIR}/system/br
+BIN_PATH=${SCRIPTDIR}/system/bl
 
 all:
 	$(CC) $(CFLAGS) $(SRC) -o $(BIN_PATH)
